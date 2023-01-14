@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bootstrap demo</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+</head>
+
+<body style="background-color:rgb(42, 42, 42)">
+  <center>
+    <h1 style="margin-top: 20px;color: white;">- News carousel -</h1>
+    <div style="border-radius: 10px;border: 10px solid rgb(147, 147, 147);width: 700px;background-color: rgb(220,220,220);">
+    <div style="border: 10px solid rgb(117, 117, 117);width: 680px;">
+      <div style="border: 10px solid rgb(87, 87, 87);width: 660px;">
+        <div style="border: 10px solid rgb(56, 56, 56); width:640px;">
+          <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel"
+            style="width: 600px;height: 400px;overflow: auto;">
+            <div class="carousel-inner" id="carousel-inner">
+              <div class="carousel-item active" data-bs-interval="100">
+              </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval"
+              data-bs-slide="prev" style="font-size:50px; opacity: 0.1;color: black;">
+              <
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval"
+              data-bs-slide="next" style="font-size:50px; opacity: 0.1;color: black;">
+              >
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </center>
+
+  <script>
+    let dataaa;
+    (async () => {
+      let numberrr = 0;
+      await fetch('https://english.alarabiya.net/feed/rss2/en.xml')
+        .then(data => data.text())
+        .then(data => new window.DOMParser().parseFromString(data, 'text/html'))
+        .then(documenttt => documenttt.querySelectorAll('item'))
+        .then(data => {
+          dataaa = data;
+          dataaa.forEach(item => {
+            let newDiv = document.createElement('div');
+            newDiv.id = `${numberrr++}`;
+            newDiv.className = 'carousel-item';
+            newDiv.setAttribute('data-bs-interval', '2000');
+
+            let aaa = document.createElement('a')   //aaa is the headline and also anchor-tag to visit the main news page
+            let anchorTag = item.querySelector('link');
+            console.log(anchorTag.nextSibling.data);
+            aaa.setAttribute('href',`${anchorTag.nextSibling.data}`);
+            aaa.setAttribute('target', '_blank')
+            aaa.innerHTML = `${item.querySelector('title').innerHTML}`
+            aaa.style.fontSize = '30px';
+            aaa.style.fontWeight = '600';
+            aaa.style.color = 'black';
+            aaa.style.display = 'block';
+            aaa.style.textDecoration = 'none'
+            console.log(aaa);
+
+            //commented the below 2 lines related to only title h1 tag.
+            //let titleee = document.createElement('h1');
+            //titleee.innerHTML = item.querySelector('title').innerHTML
+            
+            //below code of imageee is for showing the image
+            let imageee = document.createElement('img');    
+            imageee.setAttribute('src', item.querySelector('img').getAttribute('src'));
+            imageee.setAttribute('alt', 'image related to the news')
+            imageee.style.width = '400px'
+
+            //below code of descriptionnn is for adding the description.
+            let descriptionnn = document.createElement('p');
+            descriptionnn.innerHTML = item.querySelector('description').innerHTML;
+            let stringgg1 = descriptionnn.innerHTML
+            stringgg1 = stringgg1.replace('<!--[CDATA[', '').replace(']]-->', '')
+            descriptionnn.innerHTML = stringgg1
+
+            newDiv.appendChild(aaa);
+            //newDiv.appendChild(titleee); 
+            newDiv.appendChild(imageee);
+            newDiv.appendChild(descriptionnn);
+            console.log(newDiv);
+            
+            //in the code below, everything is appended to the main div that will be displayed when page will open.
+            let mainDiv = document.getElementById('carousel-inner')
+            mainDiv.appendChild(newDiv);
+
+          });
+        })
+    })();
+  </script>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+    integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"
+    integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>
